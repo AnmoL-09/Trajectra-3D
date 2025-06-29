@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" href="./src/styles/main.css">
+        <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+        <link rel="icon" type="image/png" href="https://api.iconify.design/iconoir:maze.png" />
+        <title>PathVision 3D</title>
+    </head>
+
+    <body>
+        <div class="loader">
+            <div class="boxes">
+                <div class="box">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="box">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="box">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="box">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loaded">
+            <div class="three-scene">
+                <h1>PathVision 3D</h1>
+                <div class="hamburger-wrap" onclick="toggleSettings();">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+    
+            <div class="settings">
+                <div class="main">
+                    <h2>Settings</h2>
+                    <div class="close" onclick="toggleSettings();"></div>
+                </div>
+    
+                <div class="settings-type-wrapper" onclick="openSettingsTypeOptions(0);">
+                    <img class="icon" src="./src/styles/svg/pathfinding_icon.svg" alt="">
+                    <h3>Pathfinding</h3>
+                    <div class="arrow dropdown"></div>
+                </div>
+                <div class="type-wrapper-options pathfinding">
+                    <div class="property-wrapper">
+                        <div class="type-property">Algorithm:</div>
+                        <div class="selector-wrap">
+                            <div class="selection-arrow left" onclick="switchSelectorBackwards(`pathfinding-algorithms`);"></div>
+                            <div class="selector">
+                                <button class="pathfinding-algorithms current" id="a-star-path">A*</button>
+                                <button class="pathfinding-algorithms" id="dfs-path">Depth First Search</button>
+                                <button class="pathfinding-algorithms" id="dijkstra-path">Dijkstra's</button>
+                                <button class="pathfinding-algorithms" id="bfs-path">Best First Search</button>
+                            </div>
+                            <div class="selection-arrow right" onclick="switchSelectorForwards(`pathfinding-algorithms`);"></div>
+                        </div>
+                    </div>
+    
+                    <div class="property-wrapper">
+                        <div class="type-property">Type:</div>
+                        <div class="selector-wrap">
+                            <div class="selection-arrow left" onclick="switchSelectorBackwards(`pathfinding-type`);"></div>
+                            <div class="selector">
+                                <button class="pathfinding-type current" id="4">4 Directional</button>
+                                <button class="pathfinding-type" id="8">8 Directional</button>
+                            </div>
+                            <div class="selection-arrow right" onclick="switchSelectorForwards(`pathfinding-type`);"></div>
+                        </div>
+                    </div>
+    
+                    <div class="property-wrapper">
+                        <div class="type-property">Speed:</div>
+                        <input type="range" min="1" max="10" value="9" step="1" class="slider" id ="pathfinding-speed-slider">
+                    </div>
+    
+                    <div class="buttons">
+                        <div class="visualize-pathfinding-btn btn-wrap" onclick="findPath();">
+                            <div class="main-btn">Visualize</div>
+                            <div class="after-btn"><img src="./src/styles/svg/pathfinding_visualize_icon.svg" alt=""></div>
+                        </div>
+    
+                        <div class="btn-wrap" onclick="pathMesh.clear();">
+                            <div class="main-btn">Clear</div>
+                            <div class="after-btn"><img src="./src/styles/svg/clear_icon.svg" alt=""></div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="settings-type-wrapper" onclick="openSettingsTypeOptions(1);">
+                    <img class="icon" src="./src/styles/svg/maze_icon.svg" alt="">
+                    <h3>Maze Generation</h3>
+                    <div class="arrow dropdown"></div>
+                </div>
+                <div class="type-wrapper-options maze">
+                    <div class="property-wrapper">
+                        <div class="type-property">Algorithm:</div>
+                        <div class="selector-wrap">
+                            <div class="selection-arrow left" onclick="switchSelectorBackwards(`maze-algorithms`);"></div>
+                            <div class="selector">
+                                <button class="maze-algorithms" id="dfs-maze">Depth First Search</button>
+                                <button class="maze-algorithms" id="prims-maze">Prim's algorithm</button>
+                                <button class="maze-algorithms" id="kruskals-maze">Kruskal's algorithm</button>
+                                <button class="maze-algorithms current" id="recursive-maze">Recursive division</button>
+                            </div>
+                            <div class="selection-arrow right" onclick="switchSelectorForwards(`maze-algorithms`);"></div>
+                        </div>
+                    </div>
+    
+                    <div class="property-wrapper">
+                        <div class="type-property">Speed:</div>
+                        <input type="range" min="1" max="10" value="9" step="1" class="slider" id ="maze-speed-slider">
+                    </div>
+    
+                    <div class="buttons">
+                        <div class="visualize-maze-btn btn-wrap" onclick="generateMaze();">
+                            <div class="main-btn">Visualize</div>
+                            <div class="after-btn"><img src="./src/styles/svg/maze_visualize_icon.svg" alt=""></div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="settings-type-wrapper" onclick="openSettingsTypeOptions(2);">
+                    <img class="icon" src="./src/styles/svg/board_icon.svg" alt="">
+                    <h3>Board</h3>
+                    <div class="arrow dropdown"></div>
+                </div>
+                <div class="type-wrapper-options board">
+                    <div class="property-wrapper">
+                        <div class="type-property">Height:</div>
+                        <div class="height slider-value"></div>
+                        <input type="range" min="3" max="75" value="35" step="2" class="slider" id ="height-slider">
+                    </div>
+                    <div class="property-wrapper">
+                        <div class="type-property">Width:</div>
+                        <div class="width slider-value"></div>
+                        <input type="range" min="3" max="75" value="35" step="2" class="slider" id ="width-slider">
+                    </div>
+                    <div class="buttons">
+                        <div class="btn-wrap" onclick="grid.reset();">
+                            <div class="main-btn">Reset</div>
+                            <div class="after-btn"><img src="./src/styles/svg/reset_icon.svg" alt=""></div>
+                        </div>
+    
+                        <div class="btn-wrap" onclick="grid.clear();">
+                            <div class="main-btn" >Clear</div>
+                            <div class="after-btn"><img src="./src/styles/svg/clear_icon.svg" alt=""></div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="settings-type-wrapper" onclick="toggleTutorial();">
+                    <img class="icon" src="./src/styles/svg/tutorial_icon.svg" alt="">
+                    <h3>Tutorial</h3>
+                </div>
+            </div>
+
+            <div class="tutorial-wrap">
+                <div onclick="toggleTutorial();" class="close" style="right: 22px;"></div>
+                <div class="buttons">
+                    <div class="btn-wrap" onclick="switchTutorialBackwards();">
+                        <div class="after-btn"><img src="./src/styles/svg/tutorial_arrow_left.svg" alt="" style="width: 30px;"></div>
+                        <div class="main-btn">Previous</div>
+                    </div>
+
+                    <div class="btn-wrap" onclick="switchTutorialForwards();">
+                        <div class="next-btn main-btn">Next</div>
+                        <div class="after-btn"><img src="./src/styles/svg/tutorial_arrow_right.svg" alt="" style="width: 30px;"></div>
+                    </div>
+                </div>
+
+                <div class="tutorial-pages current">
+                    <div class="text">
+                        <h2>What is PathVis3d?</h2>
+                        <p><span class="bold">PathVis3d</span> is a project created to visualize pathfinding and maze generation algorithms in 3D.</p>
+                        <p>If you want to know more about it, check it out on GitHub by clicking <a class="bold" href="https://github.com/arminasbrazenas/PathVis3d"><i>here</i></a>.</p>
+                    </div>
+                    <div class="showcase">
+                        <img class="logo-img" src="./src/styles/svg/favicon.svg" alt="">
+                    </div>
+                </div>
+
+                <div class="tutorial-pages">
+                    <div class="text">
+                        <h2>Controls</h2>
+                        <p><span class="bold">Drag</span> the mouse outside of the grid to rotate the view.</p>
+                        <p><span class="bold">Scroll</span> to zoom in and out.</p>
+
+                        <h2>Walls</h2>
+                        <p><span class="bold">Click</span> and drag the mouse on the <span class="bold">grid</span> to create walls.</p>
+                        <p><span class="bold">Click</span> on the <span class="bold">wall</span> to delete or drag while holding D to delete multiple walls.</p>
+                    </div>
+                    <div class="showcase">
+                        <img src="./src/styles/gif/controls.gif" alt="">
+                    </div>
+                </div>
+
+                <div class="tutorial-pages">
+                    <div class="text">
+                        <h2>Start and Finish positions</h2>
+                        <p>Drag the <span class="bold" style="color:#E35234;">red</span> node to change the <span class="bold" style="color:#E35234;">start</span> position.</p>
+                        <p>Drag the <span class="bold" style="color:#539263;">green</span> node to change the <span class="bold" style="color:#539263;">finish</span> position.</p>
+
+                        <h2>Board</h2>
+                        <p>All properties can be found in the <span class="bold">Board</span> dropdown menu.</p>
+                        <p>Change the board's size by moving the <span class="bold">Height</span> and <span class="bold">Width</span> range sliders.</p>
+                        <p>Remove all walls and path by clicking the <span class="bold">Clear</span> button.</p>
+                        <p>Remove all walls, path and set the start and finish node's positions to default by clicking the <span class="bold">Reset</span> button.</p>
+                    </div>
+                    <div class="showcase">
+                        <img src="./src/styles/gif/board.gif" alt="">
+                    </div>
+                </div>
+
+                <div class="tutorial-pages">
+                    <div class="text">
+                        <h2>Pathfinding</h2>
+                        <p>All properties can be found in the <span class="bold">Pathfinding</span> drop-down menu.</p>
+                        <p>To change the current pathfinding algorithm, click on the arrows or on the algorithm itself.</p>
+                        <p>In this application, pathfinding can be either 4 directional or 8 directional, as the user chooses.
+                        The cost of moving to the adjacent cell is 10, while to diagonal, it's 14.</p> 
+                        <p>Pathfinding speed can be changed by moving the <span class="bold">Speed</span> range slider.</p>
+                        <p>Start the visualization of the current algorithm by clicking the <span class="bold">Visualize</span> button.</p>
+                        <p>Remove the path by clicking the <span class="bold">Clear</span> button.</p>
+                    </div>
+                    <div class="showcase">
+                        <img src="./src/styles/gif/pathfinding.gif" alt="">
+                    </div>
+                </div>
+
+                <div class="tutorial-pages">
+                    <div class="text">
+                        <h2>Maze Generation</h2>
+                        <p>All properties can be found in the <span class="bold">Maze Generation</span> drop-down menu.</p>
+                        <p>Just like in pathfinding, you can change the current algorithm, it's speed and visualize by clicking the <span class="bold">Visualize</span> button.</p>
+                        <h2>Final Word</h2>
+                        <p>Hope you enjoy playing with this visualizer! If you encounter any problems, feel free to contact me on <a class="bold" href="https://github.com/arminasbrazenas/PathVis3d">GitHub</a>.</p>
+                    </div>
+                    <div class="showcase">
+                        <img src="./src/styles/gif/maze.gif" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="position: fixed; left: 16px; bottom: 16px; color: #fff; font-family: Arial, sans-serif; font-size: 1rem; z-index: 1000; opacity: 0.8;">
+            Made with ❤️ by Anmol
+        </div>
+
+        <script src="./src/libraries/three.min.js"></script>
+        <script src="./src/libraries/OrbitControls.js"></script>
+        <script src="./src/libraries/gsap.min.js"></script>
+        <script src="./src/classes/grid.js"></script>
+        <script src="./src/classes/walls.js"></script>
+        <script src="./src/classes/mouse.js"></script>
+        <script src="./src/classes/keyboard.js"></script>
+        <script src="./src/classes/startNode.js"></script>
+        <script src="./src/classes/finishNode.js"></script>
+        <script src="./src/classes/searchMesh.js"></script>
+        <script src="./src/classes/pathMesh.js"></script>
+        <script src="./src/algorithms/pathfinding/general.js"></script>
+        <script src="./src/algorithms/pathfinding/astar_path.js"></script>
+        <script src="./src/algorithms/pathfinding/depthfirstsearch_path.js"></script>
+        <script src="./src/algorithms/pathfinding/dijkstra_path.js"></script>
+        <script src="./src/algorithms/pathfinding/bestfirstsearch_path.js"></script>
+        <script src="./src/algorithms/mazeGeneration/general.js"></script>
+        <script src="./src/algorithms/mazeGeneration/depthfirstsearch_maze.js"></script>
+        <script src="./src/algorithms/mazeGeneration/kruskal_maze.js"></script>
+        <script src="./src/algorithms/mazeGeneration/prim_maze.js"></script>
+        <script src="./src/algorithms/mazeGeneration/recursivedivision_maze.js"></script>
+        <script src="./src/web.js"></script>
+        <script src="./src/settingsEvents.js"></script>
+        <script src="./src/tutorial.js"></script>
+        <script src="./src/main.js"></script>
+    </body>
+</html>

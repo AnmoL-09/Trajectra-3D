@@ -1154,4 +1154,15 @@ body {
 html {
   -webkit-font-smoothing: antialiased;
 }
+
+.tutorial-wrap .text,
+.tutorial-pages .text,
+.tutorial-wrap .text h2,
+.tutorial-wrap .text p,
+.tutorial-wrap .text span,
+.tutorial-pages .text h2,
+.tutorial-pages .text p,
+.tutorial-pages .text span {
+    text-align: center !important;
+}
 /*# sourceMappingURL=main.css.map */

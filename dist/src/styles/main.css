@@ -78,16 +78,18 @@ body {
 }
 
 .tutorial-pages.current {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .tutorial-pages .text {
-  height: 100%;
-  width: 35%;
-  padding: 50px;
-  padding-top: 30px;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
 }
 
 .tutorial-pages .showcase {
